@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipes_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gjailbir <gjailbir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nluya <nluya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 18:05:48 by gjailbir          #+#    #+#             */
-/*   Updated: 2021/12/16 18:05:51 by gjailbir         ###   ########.fr       */
+/*   Updated: 2021/12/16 18:44:33 by nluya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,6 @@ void	ft_run_builtin(t_shell *shell, t_cmd *cmd, char *name)
 		g_status = ft_env(shell);
 	else if (!ft_strncmp(name, "exit", ft_strlen(name)))
 		g_status = ft_exit(cmd->arg, shell);
-	else if (!ft_strncmp(name, "help", ft_strlen(name)))
-		g_status = ft_help(shell, -1);
 	else
 		ft_putendl_fd("Impossible!", 2);
 }
