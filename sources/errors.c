@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   errors.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nluya <nluya@student.42.fr>                +#+  +:+       +#+        */
+/*   By: gjailbir <gjailbir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 18:48:07 by nluya             #+#    #+#             */
-/*   Updated: 2021/12/16 18:48:09 by nluya            ###   ########.fr       */
+/*   Updated: 2021/12/16 21:32:56 by gjailbir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	ft_put_error(char *error)
+void	ft_error(char *error)
 {
 	ft_putstr_fd(RED, STDERR_FILENO);
 	ft_putstr_fd(error, STDERR_FILENO);
@@ -36,7 +36,7 @@ void	ft_critical_error(char *msg, char *errno_msg, int err)
 void	ft_raise_error(char *error_msg, char *errno_msg)
 {
 	if (error_msg)
-		ft_put_error(error_msg);
+		ft_error(error_msg);
 	else
 		perror(errno_msg);
 	if (errno)
@@ -47,7 +47,7 @@ void	ft_raise_error(char *error_msg, char *errno_msg)
 
 void	ft_raise_error_n(char *error_msg, int code)
 {
-	ft_put_error(error_msg);
+	ft_error(error_msg);
 	g_status = code;
 }
 

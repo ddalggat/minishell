@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nluya <nluya@student.42.fr>                +#+  +:+       +#+        */
+/*   By: gjailbir <gjailbir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 18:47:25 by nluya             #+#    #+#             */
-/*   Updated: 2021/12/16 18:47:26 by nluya            ###   ########.fr       */
+/*   Updated: 2021/12/16 19:47:24 by gjailbir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,18 +25,6 @@ void	ft_cmd_add_back(t_cmd **lst, t_cmd *new)
 	}
 	else
 		*lst = new;
-}
-
-void	ft_init_ps(t_shell *shell)
-{
-	char	*host;
-	char	*user;
-
-	user = getenv("USER");
-	host = ft_allocate(7);
-	gethostname(host, 6);
-	sprintf(shell->ps, GRN"%s@%s:-$ "RESET, user, host);
-	free(host);
 }
 
 t_cmd	*ft_allocate_cmd(void)

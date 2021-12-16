@@ -1,38 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   loop.c                                             :+:      :+:    :+:   */
+/*   readline.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gjailbir <gjailbir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 18:06:10 by gjailbir          #+#    #+#             */
-/*   Updated: 2021/12/16 18:06:13 by gjailbir         ###   ########.fr       */
+/*   Updated: 2021/12/16 21:56:26 by gjailbir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	ft_check_expand(char **str)
-{
-	int		result;
-	char	*expansion;
-
-	result = history_expand(*str, &expansion);
-	if (result)
-		ft_putendl_fd(expansion, 1);
-	if (result < 0 || result == 2)
-	{
-		free(expansion);
-		return (1);
-	}
-	add_history(expansion);
-	free(*str);
-	*str = ft_strdup(expansion);
-	free(expansion);
-	return (0);
-}
-
-static void	ft_lstclear_cmds(t_cmd **cmd)
+void	ft_clear_cmds(t_cmd **cmd)
 {
 	t_cmd	*next;
 
@@ -49,24 +29,24 @@ static void	ft_lstclear_cmds(t_cmd **cmd)
 	}
 }
 
-static void	ft_clean(t_shell *shell, char *str)
+void	ft_cleaning(t_shell *shell, char *str)
 {
 	if (shell->cmds)
-		ft_lstclear_cmds(&shell->cmds);
+		ft_clear_cmds(&shell->cmds);
 	if (ft_strlen(str))
 		shell->cmd_status = g_status;
 	g_status = 0;
 	free(str);
 }
 
-int	ft_loop(t_shell *shell)
+int	ft_loop_hook(t_shell *shell)
 {
 	char	*str;
 
 	using_history();
 	while (true)
 	{
-		str = readline(shell->ps);
+		str = readline(YLW"sueta$ "RESET);
 		if (g_status == 130)
 		{
 			shell->cmd_status = 1;
@@ -74,10 +54,10 @@ int	ft_loop(t_shell *shell)
 		}
 		if (!str)
 			str = ft_strdup("exit");
-		else if (ft_check_expand(&str))
-			continue ;
-		if (!ft_parser(shell, str) )
+		else
+			add_history(str);
+		if (!ft_parser(shell, str))
 			ft_run_pipes(shell);
-		ft_clean(shell, str);
+		ft_cleaning(shell, str);
 	}
 }

@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nluya <nluya@student.42.fr>                +#+  +:+       +#+        */
+/*   By: gjailbir <gjailbir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 18:47:58 by nluya             #+#    #+#             */
-/*   Updated: 2021/12/16 18:48:01 by nluya            ###   ########.fr       */
+/*   Updated: 2021/12/16 21:05:31 by gjailbir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	ft_init_env(t_shell *shell, char *envp[])
+void	ft_init_env(t_shell *shell, char *envp[])
 {
 	char	*tmp;
 	char	*shlvl;
@@ -30,16 +30,14 @@ static void	ft_init_env(t_shell *shell, char *envp[])
 	free(tmp);
 }
 
-void	ft_init(t_shell *shell, char *envp[])
+void	ft_initiation(t_shell *shell, char *envp[])
 {
 	g_status = 0;
 	rl_outstream = stderr;
 	shell->env = NULL;
 	shell->cmds = NULL;
 	shell->arr_env = NULL;
-	shell->ps = ft_allocate(100);
 	shell->buil_cmd = ft_split(BUIL_CMD, ':');
-	ft_init_ps(shell);
 	ft_init_env(shell, envp);
 	ft_copy_std_io(shell);
 	ft_restore_std_io(shell);

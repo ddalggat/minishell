@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nluya <nluya@student.42.fr>                +#+  +:+       +#+        */
+/*   By: gjailbir <gjailbir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 18:47:13 by nluya             #+#    #+#             */
-/*   Updated: 2021/12/16 18:47:15 by nluya            ###   ########.fr       */
+/*   Updated: 2021/12/16 21:39:05 by gjailbir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void	ft_add_keyword(t_shell *shell, t_list **chars, bool is_redirect)
 		ft_lstadd_front(&shell->cmd->lst, ft_lstnew(keyword));
 }
 
-char	*ft_parser_dollar(t_shell *shell, const char *s, size_t *i)
+char	*ft_parser_vars(t_shell *shell, const char *s, size_t *i)
 {
 	char	*key;
 	char	*value;

@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser.c                                           :+:      :+:    :+:   */
+/*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nluya <nluya@student.42.fr>                +#+  +:+       +#+        */
+/*   By: gjailbir <gjailbir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 18:47:19 by nluya             #+#    #+#             */
-/*   Updated: 2021/12/16 18:47:21 by nluya            ###   ########.fr       */
+/*   Updated: 2021/12/16 21:42:01 by gjailbir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	ft_parser_pipes(char *str)
+void	ft_validate_pipes(char *str)
 {
 	bool	b_pipe;
 	bool	b_words;
@@ -37,7 +37,7 @@ static void	ft_parser_pipes(char *str)
 		ft_raise_error_n(ERR_NEWL, 258);
 }
 
-static char	*ft_parser_gap(t_shell *shell, const char *s, size_t *i)
+char	*ft_parser_quotes(t_shell *shell, const char *s, size_t *i)
 {
 	t_list	*chars;
 	char	quote;
@@ -48,7 +48,7 @@ static char	*ft_parser_gap(t_shell *shell, const char *s, size_t *i)
 	while (s[*i] && s[*i] != quote)
 	{
 		if (s[*i] == '$' && quote == '\"')
-			ft_lstadd_back(&chars, ft_lstnew(ft_parser_dollar(shell, s, i)));
+			ft_lstadd_back(&chars, ft_lstnew(ft_parser_vars(shell, s, i)));
 		else
 			ft_lstadd_back(&chars, ft_lstnew(ft_substr(s, (*i)++, 1)));
 	}
@@ -59,7 +59,7 @@ static char	*ft_parser_gap(t_shell *shell, const char *s, size_t *i)
 	return (quote_str);
 }
 
-static void	ft_parser_word(t_shell *shell, const char *str, size_t *i)
+void	ft_parser_cmd(t_shell *shell, const char *str, size_t *i)
 {
 	t_list	*chars;
 	bool	is_redirect;
@@ -78,16 +78,16 @@ static void	ft_parser_word(t_shell *shell, const char *str, size_t *i)
 	while (str[*i] && !ft_strchr(" <>|\n", str[*i]))
 	{
 		if (str[*i] == '$')
-			ft_envadd_back(&chars, ft_parser_dollar(shell, str, i));
+			ft_envadd_back(&chars, ft_parser_vars(shell, str, i));
 		else if (ft_strchr("'\"", str[*i]))
-			ft_lstadd_back(&chars, ft_lstnew(ft_parser_gap(shell, str, i)));
+			ft_lstadd_back(&chars, ft_lstnew(ft_parser_quotes(shell, str, i)));
 		else
 			ft_lstadd_back(&chars, ft_lstnew(ft_substr(str, (*i)++, 1)));
 	}
 	ft_add_keyword(shell, &chars, is_redirect);
 }
 
-static void	ft_parser_words(t_shell *shell, const char *str)
+void	ft_parser_cmds(t_shell *shell, const char *str)
 {
 	size_t	i;
 
@@ -102,7 +102,7 @@ static void	ft_parser_words(t_shell *shell, const char *str)
 			i++;
 		}
 		else if (!ft_strchr(" \t\v", str[i]) && str[i] != '|')
-			ft_parser_word(shell, str, &i);
+			ft_parser_cmd(shell, str, &i);
 		else
 			i++;
 	}
@@ -111,17 +111,17 @@ static void	ft_parser_words(t_shell *shell, const char *str)
 
 int	ft_parser(t_shell *shell, char *str)
 {
-	char	*keyval;
+	char	*key_val;
 
-	ft_parser_pipes(str);
+	ft_validate_pipes(str);
 	if (g_status != 0)
 		return (1);
-	ft_parser_words(shell, str);
+	ft_parser_cmds(shell, str);
 	if (!g_status && shell->cmd && shell->cmd->lst)
 	{
-		keyval = ft_strjoin("_=", shell->cmd->lst->content);
-		ft_update_el_env(shell, keyval);
-		free(keyval);
+		key_val = ft_strjoin("_=", shell->cmd->lst->content);
+		ft_update_el_env(shell, key_val);
+		free(key_val);
 	}
 	return (g_status);
 }
